@@ -6,12 +6,23 @@ use NotificationChannels\GoogleCalendar\Exceptions\CouldNotSendNotification;
 use NotificationChannels\GoogleCalendar\Events\MessageWasSent;
 use NotificationChannels\GoogleCalendar\Events\SendingMessage;
 use Illuminate\Notifications\Notification;
+use Spatie\GoogleCalendar\Event;
 
 class GoogleCalendarChannel
 {
-    public function __construct()
+    /**
+     * @var Event
+     */
+    protected $event;
+
+    /**
+     * GoogleCalendarChannel Constructor
+     * 
+     * @param Event $event
+     */
+    public function __construct(Event $event)
     {
-        // Initialisation code here
+        $this->event = $event;
     }
 
     /**
@@ -37,7 +48,7 @@ class GoogleCalendarChannel
             $this->event->addAttendee(['email' => $data['attendee']]);
             $this->event->save();
         } catch (\Exception $e) {
-            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
+            throw CouldNotSendNotification::serviceRespondedWithAnError($e->getMessage());
         }
     }
 }

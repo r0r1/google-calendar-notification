@@ -7,7 +7,7 @@ use NotificationChannels\GoogleCalendar\Events\MessageWasSent;
 use NotificationChannels\GoogleCalendar\Events\SendingMessage;
 use Illuminate\Notifications\Notification;
 
-class :service_nameChannel
+class GoogleCalendarChannel
 {
     public function __construct()
     {
@@ -24,10 +24,20 @@ class :service_nameChannel
      */
     public function send($notifiable, Notification $notification)
     {
-        //$response = [a call to the api of your notification send]
+        if (! $url = $notifiable->routeNotificationFor('GoogleCalendar')) {
+            return;
+        }
 
-//        if ($response->error) { // replace this by the code need to check for errors
-//            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
-//        }
+        $data = $notification->toGoogleCalendar($notifiable)->toArray();
+
+        try {
+            $this->event->name = $data['name'];
+            $this->event->startDateTime = $data['start_date'];
+            $this->event->endDateTime = $data['end_date'];
+            $this->event->addAttendee(['email' => $data['attendee']]);
+            $this->event->save();
+        } catch (\Exception $e) {
+            throw CouldNotSendNotification::serviceRespondedWithAnError($response);
+        }
     }
 }

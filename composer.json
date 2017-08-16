@@ -7,14 +7,17 @@
         {
             "name": "Rori Kurniadi",
             "email": "rori.kurniadi@yahoo.com",
-            "homepage": "github.com/rorikurniadi",
+            "homepage": "https://github.com/rorikurniadi",
             "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.6.4",
+        "google/apiclient": "^2.0",
         "illuminate/notifications": "^5.3",
-        "illuminate/support": "^5.1|^5.2|^5.3"
+        "illuminate/support": "^5.1|^5.2|^5.3",
+        "nesbot/carbon": "^1.22",
+        "spatie/laravel-google-calendar": "^2.0"
     },
     "require-dev": {
         "mockery/mockery": "^0.9.5",
